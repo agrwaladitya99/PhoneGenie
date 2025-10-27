@@ -273,7 +273,7 @@ App
 ## 🗂️ File Structure Diagram
 
 ```
-mobile-chat-agent-cursor/
+PhoneGenie/
 │
 ├── data/
 │   └── mobiles.json               # 980 phones dataset

@@ -35,4 +35,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# local development files
+*.local.md
+STATUS*.md
+TEST_RESULTS.md
+BUILD_FIX.md
+OPTIMIZATION_REPORT.md
+
 

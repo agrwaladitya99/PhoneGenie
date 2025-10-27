@@ -22,6 +22,7 @@ export interface Mobile {
   primary_camera_rear: number;
   primary_camera_front: number;
   extended_memory_available: 0 | 1;
+  extended_upto?: number;
   resolution_width: number;
   resolution_height: number;
 }

@@ -1,7 +1,12 @@
 import { z } from "zod";
 
 export const ChatRequestSchema = z.object({
-  message: z.string().min(1, "Message cannot be empty").max(1000, "Message too long"),
+  message: z.string()
+    .min(1, "Message cannot be empty")
+    .max(1000, "Message too long")
+    .refine(val => val.trim().length > 0, {
+      message: "Message cannot be empty or only whitespace"
+    }),
   context: z.any().optional(),
 });
 

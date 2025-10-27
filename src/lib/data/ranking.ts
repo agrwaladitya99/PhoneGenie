@@ -5,53 +5,57 @@ export interface RankingCriteria {
   priorityFeature?: "camera" | "battery" | "performance" | "display";
 }
 
+// Optimized ranking with reduced allocations
 export function rankPhones(phones: Mobile[], criteria: RankingCriteria): Mobile[] {
-  return phones
-    .map(phone => ({
-      phone,
-      score: calculateScore(phone, criteria)
-    }))
-    .sort((a, b) => b.score - a.score)
-    .map(item => item.phone);
+  // Early return for empty array
+  if (phones.length === 0) return phones;
+  
+  // Create shallow copy to avoid mutating original
+  const phonesWithScores = phones.map(phone => ({
+    phone,
+    score: calculateScore(phone, criteria)
+  }));
+  
+  // Use in-place sort for better memory efficiency
+  phonesWithScores.sort((a, b) => b.score - a.score);
+  
+  // Extract phones
+  return phonesWithScores.map(item => item.phone);
 }
 
+// Optimized score calculation with early computation
 function calculateScore(phone: Mobile, criteria: RankingCriteria): number {
   let score = phone.rating;
 
+  // Budget scoring
   if (criteria.budget) {
     const priceRatio = phone.price / criteria.budget;
-    if (priceRatio <= 1) {
-      score += (priceRatio * 20);
-    } else {
-      score -= 50;
-    }
+    score += priceRatio <= 1 ? (priceRatio * 20) : -50;
   }
 
-  if (criteria.priorityFeature === "camera") {
-    score += (phone.primary_camera_rear / 10) * 2;
-    score += phone.num_rear_cameras * 2;
-  } else if (criteria.priorityFeature === "battery") {
-    score += (phone.battery_capacity / 1000) * 3;
-    if (phone.fast_charging_available) {
-      score += (phone.fast_charging / 10);
-    }
-  } else if (criteria.priorityFeature === "performance") {
-    score += phone.ram_capacity * 2;
-    score += phone.processor_speed * 5;
-    score += phone.refresh_rate / 10;
-  } else if (criteria.priorityFeature === "display") {
-    score += phone.screen_size * 2;
-    score += phone.refresh_rate / 10;
-    score += (phone.resolution_width * phone.resolution_height) / 100000;
+  // Feature-specific scoring
+  switch (criteria.priorityFeature) {
+    case "camera":
+      score += (phone.primary_camera_rear * 0.2) + (phone.num_rear_cameras * 2);
+      break;
+    case "battery":
+      score += (phone.battery_capacity * 0.003);
+      if (phone.fast_charging_available) {
+        score += (phone.fast_charging * 0.1);
+      }
+      break;
+    case "performance":
+      score += (phone.ram_capacity * 2) + (phone.processor_speed * 5) + (phone.refresh_rate * 0.1);
+      break;
+    case "display":
+      score += (phone.screen_size * 2) + (phone.refresh_rate * 0.1) + 
+               ((phone.resolution_width * phone.resolution_height) * 0.00001);
+      break;
   }
 
-  if (phone.has_5g) {
-    score += 5;
-  }
-
-  if (phone.refresh_rate >= 120) {
-    score += 10;
-  }
+  // Bonus features
+  if (phone.has_5g) score += 5;
+  if (phone.refresh_rate >= 120) score += 10;
 
   return score;
 }

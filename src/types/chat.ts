@@ -9,6 +9,7 @@ export interface Message {
   role: MessageRole;
   content: string;
   phones?: Mobile[];
+  additionalPhones?: Mobile[]; // Additional phones for "Show More" feature
   type?: MessageType;
   timestamp: Date;
 }
@@ -24,7 +25,7 @@ export interface ChatContext {
 }
 
 export interface IntentResult {
-  type: "search" | "compare" | "explain" | "details" | "adversarial" | "irrelevant";
+  type: "search" | "compare" | "explain" | "details" | "adversarial" | "irrelevant" | "general";
   confidence: number;
   parameters?: {
     budget?: number;

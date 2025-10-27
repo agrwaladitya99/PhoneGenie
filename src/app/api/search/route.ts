@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: "Invalid request format", details: validation.error.errors },
+        { error: "Invalid request format", details: validation.error.issues },
         { status: 400 }
       );
     }
@@ -33,8 +33,6 @@ export async function POST(request: NextRequest) {
       count: results.length,
     });
   } catch (error) {
-    console.error("Search API error:", error);
-
     return NextResponse.json(
       { error: "Search failed" },
       { status: 500 }
