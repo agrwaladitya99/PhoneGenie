@@ -2,8 +2,8 @@
 
 An intelligent mobile phone shopping assistant powered by Google Gemini AI. Helps customers discover, compare, and buy mobile phones through natural language conversations.
 
-🔗 **Live Demo**: [Deploy to your Vercel account]  
-✅ **Build Status**: Production-Ready
+🔗 **Live Demo**: [https://mobile-phone-genie.vercel.app/](https://mobile-phone-genie.vercel.app/)  
+✅ **Build Status**: Production-Ready & Deployed
 
 ---
 
